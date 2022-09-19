@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from todoapp.models import Todos
+from bookapp.models import Book
+
 
 
 
@@ -16,19 +17,19 @@ class RegistrationForm(forms.ModelForm):
             "username":forms.TextInput(attrs={"class":"form-control"}),
         }
 
+
 class Loginform(forms.Form):
     username=forms.CharField(widget=forms.TextInput())
     password=forms.CharField(widget=forms.PasswordInput())
 
-class TodoForm(forms.ModelForm):
+
+class BookForm(forms.ModelForm):
     class Meta:
-        model=Todos
-        fields=['task_name']
-        widgets={"task_name":forms.TextInput(attrs={"class":"form-control"})}
-
-
-class TodoChangeForm(forms.ModelForm):
-
-    class Meta:
-        model=Todos
+        model=Book
         fields="__all__"
+        widgets={"bookname":forms.TextInput(attrs={"class":"form-control"}),
+                 "author": forms.TextInput(attrs={"class": "form-control"}),
+                 "price": forms.NumberInput(attrs={"class": "form-control"}),
+                 "qty": forms.NumberInput(attrs={"class": "form-control"}),
+                 "publisher": forms.TextInput(attrs={"class": "form-control"}),
+                 }

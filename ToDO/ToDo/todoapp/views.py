@@ -4,6 +4,7 @@ from todoapp import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from todoapp.models import Todos
+from django.contrib import messages
 
 
 
@@ -77,6 +78,42 @@ class TodoAddView(View):
 
 class TodoListView(View):
     def get(self,request,*args,**kwargs):
-        all_todos=Todos.objects.all
+        all_todos=Todos.objects.filter(user=request.user)
         return render(request,"todolist.html",{"todos":all_todos})
+
+
+def delete_todo(request,*args,**kwargs):
+    id=kwargs.get("id")
+    Todos.objects.get(id=id).delete()
+    return redirect("todolist")
+
+class TodoDetailView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("id")
+        todo=Todos.objects.get(id=id)
+        return render(request,"todo-detail.html",{"todo":todo})
+
+class TodoEditView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("id")
+        todo=Todos.objects.get(id=id)
+        form=forms.TodoChangeForm(instance=todo)
+        return render(request,"todo_edit.html",{"form":form})
+
+    def post(self,request,*args,**kwargs):
+        id=kwargs.get("id")
+        todo=Todos.objects.get(id=id)
+        form=forms.TodoChangeForm(request.POST,instance=todo)
+        if form.is_valid():
+            form.save()
+            msg="todo has been changed"
+            messages.success(request,msg)
+            return redirect("todolist")
+        else:
+            msg = "todo update failed"
+            messages.error(request,msg)
+            return render(request,"todo_edit.html",{"form":form})
+
+
+
 

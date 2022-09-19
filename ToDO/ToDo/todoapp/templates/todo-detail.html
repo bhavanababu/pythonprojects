@@ -9,15 +9,17 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="clo-4"></div>
+        <div class="col-4"></div>
         <div class="col-4">
-<h1>Welcome user {{request.user}}!!!</h1>
-            <a href="{%url 'signout'%}">Logout</a>
-             <a href="{%url 'add-todo'%}">Add your Todos</a>
-            <a href="{%url 'todolist'%}">ListTodos</a>
+            <div>
+            {{todo.task_name}}
+          {{todo.status}}
+        {{todo.created_date}}
+        </div>
         </div>
         <div class="col-4"></div>
     </div>
 </div>
+
 </body>
 </html>
